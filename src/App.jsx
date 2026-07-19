@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
-import loginService from './services/login'
+import Login from './components/Login'
+import BlogForm from './components/BlogForm'
+import BlogList from './components/BlogList'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -15,17 +18,16 @@ const App = () => {
     )
   }, [])
 
-  const handleLogin = async (event) => {
+  const handleCreateBlog = async (event) => {
     event.preventDefault()
-    const credential = {
-      username: username,
-      password: password
+    const blogObject = {
+      title: event.target.title.value,
+      author: event.target.author.value,
+      url: event.target.url.value
     }
     try {
-      const resultLogin = await loginService.login(credential)
-      setUser(resultLogin)
-      setUsername('')
-      setPassword('')
+      const resultCreateBlog = await blogService.create(blogObject, user.token)
+      setBlogs(blogs.concat(resultCreateBlog))
     } catch (exception) {
       console.log(exception)
       setErrorMessage(exception?.response?.data?.error)
@@ -35,60 +37,19 @@ const App = () => {
     }
   }
 
-  const loginForm = () => {
-    <form onSubmit={handleLogin}>
-      <div>
-        Username
-        <input type="text" name="username" value={username}
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        Password
-        <input type='password' name='password' value={password}
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <div>
-        <button type='submit'>Login</button>
-      </div>
-    </form>
-  }
-
-  const blogForm = () => {
-    <form>
-      <div>
-        Title
-        <input type="text" name="title" />
-      </div>
-      <div>
-        Author
-        <input type="text" name="author" />
-      </div>
-      <div>
-        Url
-        <input type="text" name="url" />
-      </div>
-      <div>
-        <button type="submit">Create</button>
-      </div>
-    </form>
-  }
-
   return (
     <div>
-      <div>{errorMessage != '' ? errorMessage : ''}</div>
+      <Notification message={errorMessage} />
       {user === null ?
-        loginForm() :
+        <Login username={username} setUsername={setUsername} password={password} setPassword={setPassword} setUser={setUser} setErrorMessage={setErrorMessage} /> :
         <div>
           <p>{user.name} logged in</p>
-          {blogForm()}
+          <BlogForm handleCreateBlog={handleCreateBlog} />
+          <h2>Blogs</h2>
+          <BlogList blogs={blogs} />
         </div>
       }
-      <h2>blogs</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+
     </div>
   )
 }
