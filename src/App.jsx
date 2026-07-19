@@ -15,6 +15,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
+  const [errorType, setErrorType] = useState('')
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
@@ -35,10 +36,12 @@ const App = () => {
     try {
       const resultCreateBlog = await blogService.createBlog(blogObject)
       setBlogs(blogs.concat(resultCreateBlog))
-
+      setErrorMessage(`a new blog ${resultCreateBlog.title} added`)
+      setErrorType('success')
     } catch (exception) {
       console.log(exception)
       setErrorMessage(exception?.response?.data?.error)
+      setErrorType('error')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -62,6 +65,7 @@ const App = () => {
       )
     } catch (exception) {
       setErrorMessage(exception?.response?.data?.error)
+      setErrorType('error')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -70,7 +74,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={errorMessage} />
+      <Notification message={errorMessage} type={errorType} />
       {user === null ?
         <Login handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} /> :
         <div>
