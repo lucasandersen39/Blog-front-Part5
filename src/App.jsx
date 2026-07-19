@@ -30,13 +30,8 @@ const App = () => {
     }
   }, [])
 
-  const handleCreateBlog = async (event) => {
+  const handleCreateBlog = async (blogObject) => {
     event.preventDefault()
-    const blogObject = {
-      title: event.target.title.value,
-      author: event.target.author.value,
-      url: event.target.url.value
-    }
     try {
       const resultCreateBlog = await blogService.createBlog(blogObject)
       setBlogs(blogs.concat(resultCreateBlog))
@@ -80,7 +75,7 @@ const App = () => {
         <Login handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} /> :
         <div>
           <p style={{ textAlign: "end" }}>Username: {user.name} <Logout setUser={setUser} /></p>
-          <BlogForm handleCreateBlog={handleCreateBlog} />
+          <BlogForm createBlog={handleCreateBlog} />
           <h2>Blogs</h2>
           <BlogList blogs={blogs} />
         </div>
