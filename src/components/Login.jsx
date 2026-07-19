@@ -1,28 +1,5 @@
 import './Login.css'
-import loginService from '../services/login'
-const Login = ({ username, setUsername, password, setPassword, setUser, setErrorMessage }) => {
-
-    const handleLogin = async (event) => {
-        event.preventDefault()
-        const credential = {
-            username: username,
-            password: password
-        }
-        try {
-            const resultLogin = await loginService.login(credential)
-            setUser(resultLogin)
-            setUsername('')
-            setPassword('')
-            window.localStorage.setItem(
-                'loggedBlogsappUser', JSON.stringify(resultLogin)
-            )
-        } catch (exception) {
-            setErrorMessage(exception?.response?.data?.error)
-            setTimeout(() => {
-                setErrorMessage(null)
-            }, 5000)
-        }
-    }
+const Login = ({ handleLogin, username, setUsername, password, setPassword }) => {
     return (
         <div className="loginFormContainer">
             <h3 className='titleLogin'>Login</h3>

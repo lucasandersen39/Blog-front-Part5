@@ -6,6 +6,8 @@ import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import Notification from './components/Notification'
 import Logout from './components/Logout'
+import loginService from './services/login'
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -24,7 +26,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      // noteService.setToken(user.token)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -36,10 +38,34 @@ const App = () => {
       url: event.target.url.value
     }
     try {
-      const resultCreateBlog = await blogService.create(blogObject, user.token)
+      const resultCreateBlog = await blogService.createBlog(blogObject)
       setBlogs(blogs.concat(resultCreateBlog))
+
     } catch (exception) {
       console.log(exception)
+      setErrorMessage(exception?.response?.data?.error)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    const credential = {
+      username: username,
+      password: password
+    }
+    try {
+      const resultLogin = await loginService.login(credential)
+      blogService.setToken(resultLogin.token)
+      setUser(resultLogin)
+      setUsername('')
+      setPassword('')
+      window.localStorage.setItem(
+        'loggedBlogsappUser', JSON.stringify(resultLogin)
+      )
+    } catch (exception) {
       setErrorMessage(exception?.response?.data?.error)
       setTimeout(() => {
         setErrorMessage(null)
@@ -51,7 +77,7 @@ const App = () => {
     <div>
       <Notification message={errorMessage} />
       {user === null ?
-        <Login username={username} setUsername={setUsername} password={password} setPassword={setPassword} setUser={setUser} setErrorMessage={setErrorMessage} /> :
+        <Login handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} /> :
         <div>
           <p style={{ textAlign: "end" }}>Username: {user.name} <Logout setUser={setUser} /></p>
           <BlogForm handleCreateBlog={handleCreateBlog} />
