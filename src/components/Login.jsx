@@ -13,6 +13,9 @@ const Login = ({ username, setUsername, password, setPassword, setUser, setError
             setUser(resultLogin)
             setUsername('')
             setPassword('')
+            window.localStorage.setItem(
+                'loggedBlogsappUser', JSON.stringify(resultLogin)
+            )
         } catch (exception) {
             setErrorMessage(exception?.response?.data?.error)
             setTimeout(() => {

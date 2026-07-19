@@ -5,6 +5,7 @@ import Login from './components/Login'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import Notification from './components/Notification'
+import Logout from './components/Logout'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -16,6 +17,15 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
     )
+  }, [])
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogsappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      // noteService.setToken(user.token)
+    }
   }, [])
 
   const handleCreateBlog = async (event) => {
@@ -43,7 +53,7 @@ const App = () => {
       {user === null ?
         <Login username={username} setUsername={setUsername} password={password} setPassword={setPassword} setUser={setUser} setErrorMessage={setErrorMessage} /> :
         <div>
-          <p>{user.name} logged in</p>
+          <p style={{ textAlign: "end" }}>Username: {user.name} <Logout setUser={setUser} /></p>
           <BlogForm handleCreateBlog={handleCreateBlog} />
           <h2>Blogs</h2>
           <BlogList blogs={blogs} />
