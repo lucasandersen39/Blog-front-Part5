@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import Login from './components/Login'
@@ -7,6 +7,7 @@ import BlogList from './components/BlogList'
 import Notification from './components/Notification'
 import Logout from './components/Logout'
 import loginService from './services/login'
+import Togglable from './components/Togglable'
 
 
 const App = () => {
@@ -16,6 +17,8 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
   const [errorType, setErrorType] = useState('')
+  const blogFormRef = useRef()
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
@@ -35,6 +38,7 @@ const App = () => {
     event.preventDefault()
     try {
       const resultCreateBlog = await blogService.createBlog(blogObject)
+      blogFormRef.current.toggleVisibility()
       setBlogs(blogs.concat(resultCreateBlog))
       setErrorMessage(`a new blog ${resultCreateBlog.title} added`)
       setErrorType('success')
@@ -79,7 +83,9 @@ const App = () => {
         <Login handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} /> :
         <div>
           <p style={{ textAlign: "end" }}>Username: {user.name} <Logout setUser={setUser} /></p>
-          <BlogForm createBlog={handleCreateBlog} />
+          <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
+            <BlogForm createBlog={handleCreateBlog} />
+          </Togglable>
           <h2>Blogs</h2>
           <BlogList blogs={blogs} />
         </div>
