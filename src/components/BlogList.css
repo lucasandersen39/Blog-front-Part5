@@ -1,8 +1,38 @@
 .blog {
     padding: 10px;
+    border: 1px solid rgb(99, 232, 236);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.titleBlog {
+    background-color: rgb(215, 218, 218);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.titleBlog button {
+    border: 0;
+    border-radius: 10%;
+    font-size: 16px;
+}
+
+.titleBlog button:hover {
+    background-color: beige;
+    cursor: pointer;
 }
 
 .blogAuthor {
     background-color: rgb(240, 252, 186);
     width: fit-content;
+}
+
+.bodyBlogItem {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
