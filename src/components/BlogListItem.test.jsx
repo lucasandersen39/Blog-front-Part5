@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import BlogListItem from './BlogListItem'
 import { expect, test } from 'vitest'
 
@@ -34,4 +35,32 @@ test('renders the blog title and author', () => {
   expect(detailDiv).not.toBeVisible()
   expect(urlElement).not.toBeVisible()
   expect(likesElement).not.toBeVisible()
+})
+
+test('clicking the view button shows blog details', async () => {
+  const blog = {
+    title: 'Test Blog',
+    author: 'Test Author',
+    url: 'http://testblog.com',
+    likes: 5,
+    user: {
+      id: 'user123',
+      name: 'Test User'
+    }
+  }
+  const user = {
+    id: 'user123',
+    name: 'Test User'
+  }
+  const { container } = render(<BlogListItem blog={blog} user={user} />)
+  const userSetup = userEvent.setup()
+  const viewButton = screen.getByText('view')
+  await userSetup.click(viewButton)
+
+  const detailDiv = container.querySelector('.bodyBlogItem')
+  expect(detailDiv).toHaveStyle('display: block')
+  const urlElement = screen.getByText('http://testblog.com')
+  const likesElement = screen.getByText('Likes: 5')
+  expect(urlElement).toBeVisible()
+  expect(likesElement).toBeVisible()
 })
