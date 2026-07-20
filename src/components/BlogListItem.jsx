@@ -31,12 +31,11 @@ const BlogListItem = ({ blog, user, handleDelete }) => {
   return (
     <div className="blog">
       <div className='titleBlog'>
-        {blog.title} <button onClick={toggleVisibility}>{buttonLabel}</button>
+        <span className="blog-title">{blog.title}</span>
+        <span className="blog-author"> {blog.author}</span>
+        <button onClick={toggleVisibility}>{buttonLabel}</button>
       </div>
       <div className='bodyBlogItem' style={showDisplay}>
-        <div className='blogAuthor'>
-          {blog.author}
-        </div>
         <div>
           <a href={blog.url}>{blog.url}</a>
         </div>
