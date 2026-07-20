@@ -52,6 +52,11 @@ const App = () => {
     }
   }
 
+  const handleDeleteBlog = async (id) => {
+    await blogService.deleteBlog(id)
+    setBlogs(blogs.filter(blog => blog.id !== id))
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
     const credential = {
@@ -87,7 +92,7 @@ const App = () => {
             <BlogForm createBlog={handleCreateBlog} />
           </Togglable>
           <h2>Blogs</h2>
-          <BlogList blogs={blogs} />
+          <BlogList blogs={blogs} user={user} handleDeleteBlog={handleDeleteBlog} />
         </div>
       }
 

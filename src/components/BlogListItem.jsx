@@ -2,15 +2,16 @@ import './BlogList.css'
 
 import { useState } from 'react'
 import blogService from '../services/blogs'
+import BtnDelete from './BtnDelete'
 
-const BlogListItem = ({ blog }) => {
+const BlogListItem = ({ blog, user, handleDelete }) => {
     const [visible, setVisible] = useState(false)
     const [buttonLabel, setButtonLabel] = useState('view')
     const [likes, setLikes] = useState(blog.likes)
 
     const toggleVisibility = () => {
         setVisible(!visible)
-        setButtonLabel(!visible ? 'hiden' : 'view')
+        setButtonLabel(!visible ? 'hidden' : 'view')
     }
 
     const handleLikeButton = async () => {
@@ -45,6 +46,9 @@ const BlogListItem = ({ blog }) => {
                 <div>
                     {blog.user ? blog.user.name : ''}
                 </div>
+                {blog.user && blog.user.id === user.id && (
+                    <BtnDelete confirmMessage={`Remove blog ${blog.title}`} handleDelete={handleDelete} id={blog.id} />
+                )}
             </div>
         </div>
     )

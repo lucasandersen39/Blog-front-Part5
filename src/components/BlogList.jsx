@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './BlogList.css'
 import BlogListItem from './BlogListItem'
-const BlogList = ({ blogs }) => {
+const BlogList = ({ blogs, user, handleDeleteBlog }) => {
     const [orderBy, setOrderBy] = useState('title')
     const blogListStyle = {
         margin: "10px",
@@ -30,7 +30,7 @@ const BlogList = ({ blogs }) => {
                 </select>
             </div>
             {orderedBlogs.map(blog => (
-                <BlogListItem key={blog.id} blog={blog} style={blogListStyle} />
+                <BlogListItem key={blog.id} blog={blog} style={blogListStyle} user={user} handleDelete={handleDeleteBlog} />
             ))}
         </div>
     )
