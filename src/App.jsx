@@ -87,7 +87,7 @@ const App = () => {
       {user === null ?
         <Login handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} /> :
         <div>
-          <p style={{ textAlign: "end" }}>Username: {user.name} <Logout setUser={setUser} /></p>
+          <p style={{ textAlign: 'end' }}>Username: {user.name} <Logout setUser={setUser} /></p>
           <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
             <BlogForm createBlog={handleCreateBlog} />
           </Togglable>
