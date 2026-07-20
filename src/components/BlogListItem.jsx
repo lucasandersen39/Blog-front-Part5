@@ -1,20 +1,20 @@
 import './BlogList.css'
 
 import { useState } from 'react'
-import blogService from '../services/blogs'
+// import blogService from '../services/blogs'
 import BtnDelete from './BtnDelete'
 
-const BlogListItem = ({ blog, user, handleDelete }) => {
+const BlogListItem = ({ blog, user, handleDelete, handleLikeButton }) => {
   const [visible, setVisible] = useState(false)
   const [buttonLabel, setButtonLabel] = useState('view')
-  const [likes, setLikes] = useState(blog.likes)
+  // const [likes, setLikes] = useState(blog.likes)
 
   const toggleVisibility = () => {
     setVisible(!visible)
     setButtonLabel(!visible ? 'hidden' : 'view')
   }
 
-  const handleLikeButton = async () => {
+  /* const handleLikeButton = async () => {
     const likesIncremented = likes + 1
     const updatedBlog = {
       title: blog.title,
@@ -25,7 +25,7 @@ const BlogListItem = ({ blog, user, handleDelete }) => {
     }
     const response = await blogService.updateBlog(blog.id, updatedBlog)
     setLikes(response.likes ? response.likes : 1)
-  }
+  } */
 
   const showDisplay = { display: visible ? '' : 'none' }
   return (
@@ -40,7 +40,7 @@ const BlogListItem = ({ blog, user, handleDelete }) => {
           <a href={blog.url}>{blog.url}</a>
         </div>
         <div>
-          Likes: {likes} <button onClick={handleLikeButton}>like</button>
+          Likes: {blog.likes} <button onClick={handleLikeButton}>like</button>
         </div>
         <div>
           {blog.user ? blog.user.name : ''}

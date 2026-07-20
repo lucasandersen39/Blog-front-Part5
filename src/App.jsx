@@ -81,6 +81,18 @@ const App = () => {
     }
   }
 
+  const handleLikeButton = async (blog) => {
+    const updatedBlog = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user ? blog.user.id : null
+    }
+    const response = await blogService.updateBlog(blog.id, updatedBlog)
+    setBlogs(blogs.map(b => b.id === blog.id ? response : b))
+  }
+
   return (
     <div>
       <Notification message={errorMessage} type={errorType} />
@@ -92,7 +104,7 @@ const App = () => {
             <BlogForm createBlog={handleCreateBlog} />
           </Togglable>
           <h2>Blogs</h2>
-          <BlogList blogs={blogs} user={user} handleDeleteBlog={handleDeleteBlog} />
+          <BlogList blogs={blogs} user={user} handleDeleteBlog={handleDeleteBlog} handleLikeButton={handleLikeButton} />
         </div>
       }
 
