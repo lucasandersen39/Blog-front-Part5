@@ -17,6 +17,8 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
   const [errorType, setErrorType] = useState('')
+  const [blogToEdit, setBlogToEdit] = useState(null)
+
   const blogFormRef = useRef()
 
   useEffect(() => {
@@ -93,6 +95,34 @@ const App = () => {
     setBlogs(blogs.map(b => b.id === blog.id ? response : b))
   }
 
+  const editBlog = async (id) => {
+    const blogToEdit = blogs.find(blog => blog.id === id)
+    if (!blogToEdit) {
+      setErrorMessage('Blog not found')
+      setErrorType('error')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      return
+    }
+    setBlogToEdit(blogToEdit)
+    blogFormRef.current.open()
+  }
+
+  const handleUpdateBlog = async (updatedBlog) => {
+    try {
+      const response = await blogService.updateBlog(blogToEdit.id, updatedBlog)
+      setBlogs(blogs.map(b => b.id === blogToEdit.id ? response : b))
+      setBlogToEdit(null)
+    } catch (exception) {
+      setErrorMessage(exception?.response?.data?.error)
+      setErrorType('error')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   return (
     <div>
       <Notification message={errorMessage} type={errorType} />
@@ -100,11 +130,15 @@ const App = () => {
         <Login handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} /> :
         <div data-testid="main-content">
           <p style={{ textAlign: 'end' }}>Username: {user.name} <Logout setUser={setUser} /></p>
-          <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
-            <BlogForm createBlog={handleCreateBlog} />
+          <Togglable buttonLabel="Create new blog" ref={blogFormRef} onClose={() => setBlogToEdit(null)}>
+            {blogToEdit ? (
+              <BlogForm key={blogToEdit.id} submitAction={handleUpdateBlog} titleLabel="Edit blog" initialData={blogToEdit} />
+            ) : (
+              <BlogForm key={'create'} submitAction={handleCreateBlog} />
+            )}
           </Togglable>
           <h2>Blogs</h2>
-          <BlogList blogs={blogs} user={user} handleDeleteBlog={handleDeleteBlog} handleLikeButton={handleLikeButton} />
+          <BlogList blogs={blogs} user={user} handleDeleteBlog={handleDeleteBlog} handleLikeButton={handleLikeButton} editBlog={editBlog} />
         </div>
       }
 

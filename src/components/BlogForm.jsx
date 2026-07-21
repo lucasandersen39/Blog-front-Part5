@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import './BlogForm.css'
-const BlogForm = ({ createBlog }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+const BlogForm = ({ submitAction, titleLabel = 'Create new blog', initialData = {} }) => {
+  console.log('initialData:', initialData)
+  const [title, setTitle] = useState(initialData.title || '')
+  const [author, setAuthor] = useState(initialData.author || '')
+  const [url, setUrl] = useState(initialData.url || '')
 
   const addBlog = (event) => {
     event.preventDefault()
-    createBlog({
+    submitAction({
       title: title,
       author: author,
       url: url
@@ -19,7 +20,7 @@ const BlogForm = ({ createBlog }) => {
   }
   return (
     <div className="blogFormContainer">
-      <h3 className='titleFormNewBlog'>Create new blog</h3>
+      <h3 className='titleFormNewBlog'>{titleLabel}</h3>
       <form onSubmit={addBlog} className="blogForm">
         <div className="blogForm__input">
           <label htmlFor="title">Title</label>
@@ -37,7 +38,7 @@ const BlogForm = ({ createBlog }) => {
             onChange={({ target }) => setUrl(target.value)} name="url" id="url" data-testid="url-input" />
         </div>
         <div className="blogForm__button">
-          <button type="submit" data-testid="submit-blog-button">Create</button>
+          <button type="submit" data-testid="submit-blog-button">Save</button>
         </div>
       </form>
     </div>

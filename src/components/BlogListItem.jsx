@@ -4,36 +4,27 @@ import { useState } from 'react'
 // import blogService from '../services/blogs'
 import BtnDelete from './BtnDelete'
 
-const BlogListItem = ({ blog, user, handleDelete, handleLikeButton }) => {
+const BlogListItem = ({ blog, user, handleDelete, handleLikeButton, editBlog }) => {
   const [visible, setVisible] = useState(false)
   const [buttonLabel, setButtonLabel] = useState('view')
-  // const [likes, setLikes] = useState(blog.likes)
 
   const toggleVisibility = () => {
     setVisible(!visible)
     setButtonLabel(!visible ? 'hidden' : 'view')
   }
 
-  /* const handleLikeButton = async () => {
-    const likesIncremented = likes + 1
-    const updatedBlog = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: likesIncremented,
-      user: (blog.user ? blog.user.id : null)
-    }
-    const response = await blogService.updateBlog(blog.id, updatedBlog)
-    setLikes(response.likes ? response.likes : 1)
-  } */
-
   const showDisplay = { display: visible ? '' : 'none' }
   return (
     <div className="blog">
       <div className='titleBlog'>
-        <span className="blog-title">{blog.title}</span>
-        <span className="blog-author"> {blog.author}</span>
-        <button onClick={toggleVisibility}>{buttonLabel}</button>
+        <div>
+          <span className="blog-title">{blog.title}</span> -
+          <span className="blog-author"> {blog.author}</span>
+        </div>
+        <div className="blog-buttons">
+          <button onClick={toggleVisibility}>{buttonLabel}</button>
+          <button onClick={() => editBlog(blog.id)}>Edit</button>
+        </div>
       </div>
       <div className='bodyBlogItem' style={showDisplay}>
         <div>
