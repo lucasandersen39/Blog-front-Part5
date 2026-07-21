@@ -5,7 +5,7 @@ const Logout = ({ setUser }) => {
     window.localStorage.removeItem('loggedBlogsappUser')
   }
   return (
-    <button type="button" onClick={handleLogout}>Logout</button>
+    <button type="button" onClick={handleLogout} data-testid="logout-button">Logout</button>
   )
 
 }

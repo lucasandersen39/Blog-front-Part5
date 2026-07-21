@@ -5,8 +5,8 @@ const Notification = ({ message, type }) => {
   }
 
   return (
-    <div class="containerNotification">
-      <div className={`notification ${type}`}>
+    <div class="containerNotification" data-testid="notification">
+      <div className={`notification ${type}`} >
         {message}
       </div>
     </div>

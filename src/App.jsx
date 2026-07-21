@@ -98,7 +98,7 @@ const App = () => {
       <Notification message={errorMessage} type={errorType} />
       {user === null ?
         <Login handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} /> :
-        <div>
+        <div data-testid="main-content">
           <p style={{ textAlign: 'end' }}>Username: {user.name} <Logout setUser={setUser} /></p>
           <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
             <BlogForm createBlog={handleCreateBlog} />

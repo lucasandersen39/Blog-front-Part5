@@ -21,7 +21,7 @@ const BlogList = ({ blogs, user, handleDeleteBlog, handleLikeButton }) => {
   })
 
   return (
-    <div>
+    <div data-testid="blog-list">
       <div>
         Order by <select value={orderBy} onChange={e => setOrderBy(e.target.value)}>
           <option value="title">Title</option>
